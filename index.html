@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD Gift 🎂</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Short+Stack&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --bg-color: #fdf6e3; --accent: #e91e63; }
+        body { margin: 0; background-color: var(--bg-color); font-family: 'Poppins', sans-serif; overflow: hidden; }
+        
+        /* Navigasi Pages */
+        .page { 
+            height: 100vh; width: 100vw; 
+            display: none; 
+            flex-direction: column; justify-content: center; align-items: center; 
+            position: absolute; text-align: center;
+            background-color: var(--bg-color);
+        }
+        .page.active { display: flex; }
+
+        /* Tombol Home/Back (Fixed di pojok kiri atas) */
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: white;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 8px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .home-btn:hover { background: var(--accent); color: white; }
+
+        /* Page 1: Candle */
+        .candle { width: 30px; height: 100px; background: #ff4081; margin: 20px auto; position: relative; border-radius: 5px; }
+        .flame { 
+            width: 20px; height: 35px; background: radial-gradient(circle, #fff, orange, red); 
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; 
+            position: absolute; top: -30px; left: 5px; cursor: pointer; animation: flicker 0.1s infinite alternate; 
+        }
+
+        /* Styling Buku & Scrapbook */
+        .book-container { background: #fffef0; padding: 30px; width: 85%; max-width: 400px; box-shadow: 10px 10px 0px #ddd; border-radius: 10px; }
+        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .photo { 
+        background: white; 
+        padding: 5px; 
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        width: 140px; /* Batasi lebar kotaknya (sesuaiin aja, misal 120px-150px) */
+        height: 140px; /* Biar kotak fotonya seragam (square) */
+        overflow: hidden; /* Biar kalau fotonya lonjong gak keluar kotak */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .photo img { 
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover; /* INI KUNCINYA: Biar foto otomatis kepotong rapi di dalem kotak tanpa gepeng */
+        display: block; 
+        border-radius: 3px; 
+    }
+        
+        .handwriting { font-family: 'Short Stack', cursive; color: var(--accent); margin-bottom: 10px; }
+        .next-btn { 
+            background: var(--accent); color: white; border: none; 
+            padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 4px 0 #ad1457; transition: 0.2s;
+        }
+        .next-btn:active { transform: translateY(3px); box-shadow: none; }
+
+        @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.1); } }
+
+        @media (max-width: 480px) {
+        .handwriting { font-size: 1.5rem; }
+        .book-container { padding: 20px; }
+        iframe { width: 280px; height: 160px; } /* Ngecilin Spotify dikit buat HP mini */
+    }
+    </style>
+</head>
+<body>
+
+    <button id="homeBtn" class="home-btn" style="display: none;" onclick="goHome()">🏠 Home</button>
+
+    <section id="page1" class="page active">
+        <h1 class="handwriting animate__animated animate__fadeIn">Make a Wish...</h1>
+        <div class="candle"><div class="flame" id="flame"></div></div>
+        <p>Tap apinya buat tiup!</p>
+    </section>
+
+    <section id="page2" class="page">
+        <div class="book-container animate__animated animate__zoomIn">
+            <h2 class="handwriting">Buat Nayyy,</h2>
+            <p>Selamat ulang tahun! Semoga makin sukses, sehat selalu, dan apa yang disemogakan segera terwujud, makasih udah kuat sampai sejauh ini, lu udah hebat banget, dan gua selalu bangga dan ngedukung semuan keputusan baik yang lu ambil. Semangat ngejalanin harinya!</p>
+            <button class="next-btn" onclick="nextPage(3)">Buka Foto →</button>
+        </div>
+    </section>
+
+    <section id="page3" class="page">
+        <h2 class="handwriting">Our Memories ✨</h2>
+        <div class="photo-grid">
+            <div class="photo animate__animated animate__fadeInLeft" style="transform: rotate(-3deg)"><img src="images/1.jpg"></div>
+            <div class="photo animate__animated animate__fadeInRight" style="transform: rotate(3deg)"><img src="images/2.jpg"></div>
+            <div class="photo animate__animated animate__fadeInLeft" style="transform: rotate(2deg)"><img src="images/3.jpg"></div>
+            <div class="photo animate__animated animate__fadeInRight" style="transform: rotate(-2deg)"><img src="images/4.jpg"></div>
+        </div>
+        <button class="next-btn" onclick="nextPage(4)">Lanjut 🎵</button>
+    </section>
+
+    <section id="page4" class="page">
+        <h2 class="handwriting">Vibe Buat Lu 🎧</h2>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2m38wi9KF3pTFehX8aY36n?si=rIIY8w-dQoWR1BsIzZA0xA" width="300" height="180" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <button class="next-btn" onclick="nextPage(5)" style="margin-top: 20px;">Harapan →</button>
+    </section>
+
+    <section id="page5" class="page">
+        <h2 class="handwriting">Tulis Harapan Lu!</h2>
+        <textarea id="wishArea" style="width: 250px; height: 100px; border-radius: 10px; padding: 10px; border: 2px solid #ddd;" placeholder="Ketik doa lo di sini..."></textarea><br>
+        <button class="next-btn" onclick="confettiExplosion()">Simpan Doa 💖</button>
+        <div id="finalMsg" style="display:none; margin-top: 15px; font-weight: bold; color: var(--accent);">Amiin! Mashaallah Tabarrakallah 🌟</div>
+    </section>
+
+    <script>
+        const homeBtn = document.getElementById('homeBtn');
+        const flame = document.getElementById('flame');
+
+        function nextPage(n) {
+            // Sembunyiin semua page
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Tunjukin page target
+            const target = document.getElementById('page' + n);
+            target.classList.add('active');
+
+            // Tunjukin tombol Home kalau bukan di page 1
+            if (n > 1) {
+                homeBtn.style.display = 'block';
+            } else {
+                homeBtn.style.display = 'none';
+                flame.style.display = 'block'; // Reset lilin kalau balik ke home
+            }
+        }
+
+        function goHome() {
+            nextPage(1);
+        }
+
+        flame.addEventListener('click', () => {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            // Delay bentar biar lilinnya keliatan mati
+            flame.style.display = 'none';
+            setTimeout(() => nextPage(2), 1000);
+        });
+
+        function confettiExplosion() {
+            const val = document.getElementById('wishArea').value;
+            if(val.trim() !== "") {
+                confetti({
+                    particleCount: 300,
+                    spread: 100,
+                    scalar: 1.2
+                });
+                document.getElementById('finalMsg').style.display = 'block';
+            } else {
+                alert("Isi dulu dong harapannya!");
+            }
+        }
+    </script>
+</body>
+</html>
